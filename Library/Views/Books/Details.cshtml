@@ -1,0 +1,10 @@
+@using Library.Models
+
+<p>@Model.Title</p>
+@foreach (Copy c in @Model.Copies)
+{
+  <p>@Html.ActionLink(c.Id.ToString(),"Details","Copies",new {id = c.Id}) : Checked Out - @c.IsCheckedOut.ToString()
+  </p>
+}
+@Html.ActionLink("Add authors to this book","Add","Authors")
+@Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})

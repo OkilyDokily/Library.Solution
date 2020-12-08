@@ -1,0 +1,17 @@
+@model Library.Models.Copy
+
+<p>@Model.Book.Title</p>
+@if(!@Model.IsCheckedOut)
+{
+  <p>Would you like to checkout this copy?</p>
+  @using(Html.BeginForm("Checkout","Patrons"))
+  {
+    @Html.HiddenFor(h=> h.Id)
+    <input type="submit" value="Checkout">
+  }
+}
+else
+{
+  <p>This copy is not available to checkout</p>
+}
+

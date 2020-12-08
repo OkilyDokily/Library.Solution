@@ -1,0 +1,6 @@
+@using Library.Models;
+
+@foreach (Patron patron in @Model)
+{
+    <p>@Html.ActionLink(patron.Name,"Details",new {id = patron.Id})</p>
+}

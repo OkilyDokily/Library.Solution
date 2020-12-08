@@ -1,0 +1,11 @@
+@using Library.Models 
+
+<p>@Model.Name</p>
+<ul>
+  @foreach(PatronCopy join in @Model.Copies)
+  {
+    <li>@Html.ActionLink(join.Copy.Book.Title,"Details","Books",new{id = join.Copy.Book.Id})</li>
+  }
+</ul>
+
+

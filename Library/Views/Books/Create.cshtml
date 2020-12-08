@@ -1,0 +1,9 @@
+@model Library.Models.Book
+
+
+@using(Html.BeginForm())
+{
+    @Html.LabelFor(x => x.Title);
+    @Html.EditorFor(x => x.Title);
+    <input type="submit" value="Go!">
+}

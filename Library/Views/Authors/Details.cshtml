@@ -1,0 +1,11 @@
+@using Library.Models
+
+<p>@Model.Name</p>
+<ul>
+  @foreach(AuthorBook join in @Model)
+  {
+    <li>@Html.ActionLink(@join.Book.Title,"Details","Authors")</li>
+  }
+</ul>
+
+

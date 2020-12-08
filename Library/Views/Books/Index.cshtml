@@ -1,0 +1,6 @@
+@using Library.Models;
+<p>@Html.ActionLink("Add a book to the library", "Create","Books")</p>
+@foreach (Book book in @Model)
+{
+    <p>@Html.ActionLink(book.Title,"Details",new {id = book.Id})</p>
+}

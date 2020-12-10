@@ -1,10 +1,18 @@
 @using Library.Models 
-
 <p>@Model.Name</p>
 <ul>
   @foreach(PatronCopy join in @Model.Copies)
   {
-    <li>@Html.ActionLink(join.Copy.Book.Title,"Details","Books",new{id = join.Copy.Book.Id})</li>
+    <li>@Html.ActionLink(join.Copy.Book.Title,"Details","Books",new{id = join.Copy.Book.Id}) : Due On - @join.DueDate</li>
+    @if(join.Returned == false)
+    {
+      <p>Would you like to return this copy?</p>
+      @using(Html.BeginForm("Return","Patrons"))
+      {
+        @Html.Hidden("patroncopyid",@join.Id);
+        <input type="submit" value="Return">
+      }
+    }
   }
 </ul>
 

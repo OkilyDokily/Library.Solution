@@ -1,10 +1,18 @@
 @using Library.Models
 
 <p>@Model.Title</p>
+<p>Authors</p>
+@foreach(AuthorBook join in @Model.Authors)
+{
+  <p>@Html.ActionLink(@join.Author.Name, "Details","Authors",new{id = @join.Author.Id})</p>
+}
+<p>Copies</p>
 @foreach (Copy c in @Model.Copies)
 {
   <p>@Html.ActionLink(c.Id.ToString(),"Details","Copies",new {id = c.Id}) : Checked Out - @c.IsCheckedOut.ToString()
   </p>
 }
-@Html.ActionLink("Add authors to this book","Add","Authors")
+
+
+@Html.ActionLink("Add authors to this book","Add","Authors", new{id = @Model.Id})
 @Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})

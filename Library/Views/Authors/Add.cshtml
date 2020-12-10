@@ -1,5 +1,10 @@
-<p>Search for authors to add to this book.</p>
-@using (Html.BeginForm())
-{
+@model Library.Models.Book
 
+<p>Search for authors to add to this book.</p>
+<p>@Model.Title</p>
+@using (Html.BeginForm("Search","Authors"))
+{
+  @Html.Hidden("id",@Model.Id)
+  @Html.TextBox("name")
+  <input type="submit" value="Search">
 }

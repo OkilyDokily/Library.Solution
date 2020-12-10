@@ -1,0 +1,6 @@
+@using Library.Models
+<p>List of overdue books</p>
+@foreach (PatronCopy join in @Model)
+{
+  <p>A copy of @join.Copy.Book.Title checked out by @join.Patron.Name is due</p>
+}

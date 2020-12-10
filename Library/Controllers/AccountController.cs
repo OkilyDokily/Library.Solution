@@ -5,9 +5,11 @@ using Library.Models;
 using Library.ViewModels;
 using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ToDoList.Controllers
 {
+  [AllowAnonymous]
   public class AccountController : Controller
   {
     private readonly LibraryContext _db;

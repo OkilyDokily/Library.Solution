@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Library.Controllers;
+using System.Linq;
 
 namespace Library.Models
 {
@@ -12,6 +14,11 @@ namespace Library.Models
         {
             this.Copies = new HashSet<Copy>();
             this.Authors = new HashSet<AuthorBook>();
+        }
+
+        public static List<Book> SearchByTitle(BooksController bc, string title)
+        {
+            return bc._db.Books.Where(x=>x.Title == title).ToList();
         }
     }
 }

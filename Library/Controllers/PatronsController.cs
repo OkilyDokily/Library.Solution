@@ -41,7 +41,7 @@ namespace Library.Controllers
 
     public ActionResult Details(int id)
     {
-      Patron patron = _db.Patrons.Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x=>x.Book).FirstOrDefault(x => x.Id == id);
+      Patron patron = _db.Patrons.Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.Id == id);
       return View(patron);
     }
 
@@ -51,13 +51,29 @@ namespace Library.Controllers
 
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      //DateTime today = (DateTime.Now).AddDays(42);
+      DateTime today = (DateTime.Now).AddDays(-42);
       Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
 
-      PatronCopy pc = new PatronCopy() { CopyId = id, PatronId = p.Id };
+      PatronCopy pc = new PatronCopy() { CopyId = id, PatronId = p.Id, DueDate = today };
 
       _db.PatronCopies.Add(pc);
       _db.SaveChanges();
       return RedirectToAction("Details", "Patrons", new { id = p.Id });
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Return(int id, int patroncopyid)
+    {
+      Console.WriteLine(patroncopyid);
+      string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
+      PatronCopy patronCopy = _db.PatronCopies.FirstOrDefault(x => x.Id == patroncopyid);
+      patronCopy.Returned = true;
+      _db.Entry(patronCopy).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = p.Id });
     }
   }
 }

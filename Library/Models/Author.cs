@@ -12,11 +12,10 @@ namespace Library.Models
         public string Name {get;set;}
         public IEnumerable<AuthorBook> Books{get;set;}
 
-        public List<Author> Search(AuthorController ac,string str)
+        public static List<Author> Search(AuthorsController ac,string str)
         {
            List<Author> authors = ac._db.Authors.Where(x=>x.Name == str).ToList(); 
            return authors;     
         }
-        
     }
 }

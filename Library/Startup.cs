@@ -5,6 +5,8 @@ using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Library
@@ -22,7 +24,17 @@ namespace Library
     public IConfigurationRoot Configuration { get; set; }
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddMvc();
+      services.AddMvc(config =>
+    {
+      // using Microsoft.AspNetCore.Mvc.Authorization;
+      // using Microsoft.AspNetCore.Authorization;
+      var policy = new AuthorizationPolicyBuilder()
+                       .RequireAuthenticatedUser()
+                       .Build();
+      config.Filters.Add(new Microsoft.AspNetCore.Mvc.Authorization.AuthorizeFilter(policy));
+    })
+       .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
 
       services.AddEntityFrameworkMySql()
       .AddDbContext<LibraryContext>(options => options

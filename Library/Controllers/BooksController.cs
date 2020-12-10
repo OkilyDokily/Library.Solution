@@ -10,7 +10,7 @@ namespace Library.Controllers
 {
   public class BooksController : Controller
   {
-    private readonly LibraryContext _db;
+    public readonly LibraryContext _db;
     public BooksController(LibraryContext db)
     {
       _db = db;
@@ -35,10 +35,22 @@ namespace Library.Controllers
       return View(books);
     }
 
+    [HttpPost]
+    public ActionResult Index(string title)
+    {
+      return RedirectToAction("Results", new { title = title });
+    }
+
+    public ActionResult Results(string title)
+    {
+      Console.WriteLine(title);
+      List<Book> books = Book.SearchByTitle(this, title);
+      return View(books);
+    }
+
     public ActionResult Details(int id)
     {
-      Book book = _db.Books.Include(x => x.Copies).FirstOrDefault(x => x.Id == id);
-
+      Book book = _db.Books.Include(x => x.Copies).Include(x => x.Authors).ThenInclude(x => x.Author).FirstOrDefault(x => x.Id == id);
       return View(book);
     }
   }

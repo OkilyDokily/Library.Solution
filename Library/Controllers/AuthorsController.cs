@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Controllers
 {
-    public class AuthorController : Controller
+    public class AuthorsController : Controller
     {
         public readonly LibraryContext _db;
 
-        public AuthorController(LibraryContext db)
+        public AuthorsController(LibraryContext db)
         {
             _db = db;
         }
@@ -31,7 +31,7 @@ namespace Library.Controllers
         public ActionResult Index()
         {
             List<Author> authors = _db.Authors.ToList();
-            return View();
+            return View(authors);
         }
 
         public ActionResult Details(int id)
@@ -44,6 +44,26 @@ namespace Library.Controllers
         {
             Book b = _db.Books.FirstOrDefault(x=>x.Id == id);
             return View(b);
+        }
+
+        [HttpPost]
+        public ActionResult Search(int id,string name)
+        {
+            return RedirectToAction("Results",new{ id = id, name = name});
+        }
+
+        public ActionResult Results(int id, string name)
+        {
+            List<Author> authors = Author.Search(this, name);
+            return View(authors);
+        }
+
+        [HttpPost, ActionName("Results")]
+        public ActionResult ResultsPost(int id, int authorid)
+        {
+            _db.AuthorBooks.Add(new AuthorBook{AuthorId = authorid, BookId = id });
+            _db.SaveChanges();
+            return RedirectToAction("Details","Books",new{id = id});
         }
     }
 }

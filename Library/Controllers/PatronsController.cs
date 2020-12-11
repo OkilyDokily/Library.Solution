@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Web.Mvc;
+
 
 namespace Library.Controllers
 {
@@ -32,13 +32,22 @@ namespace Library.Controllers
       {
         return RedirectToAction("Index", "Home");
       }
-
     }
 
-    public ActionResult Details(int id)
+    public async Task<ActionResult> Details(int id)
     {
-      Patron patron = _db.Patrons.Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.Id == id);
-      return View(patron);
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      Patron p = _db.Patrons.Include(x => x.User).Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.User.Id == currentUser.Id);
+      if ((LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)) || id == p.Id) && userId != null)
+      {
+        return View(p);
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
+
     }
 
     [HttpPost]
@@ -60,28 +69,19 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Return(int id, int patroncopyid)
+    public async Task<ActionResult> Return(int patroncopyid)
     {
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
-      PatronCopy patronCopy = _db.PatronCopies.FirstOrDefault(x => x.Id == patroncopyid);
+      PatronCopy patronCopy = _db.PatronCopies.Include(x => x.Copy).FirstOrDefault(x => x.Id == patroncopyid);
       patronCopy.Returned = true;
       _db.Entry(patronCopy).State = EntityState.Modified;
-      Copy c = _db.Copies.FirstOrDefault(x => x.Id == id);
-      c.IsCheckedOut = true;
+      Copy c = _db.Copies.FirstOrDefault(x => x.Id == patronCopy.Copy.Id);
+      c.IsCheckedOut = false;
       _db.Entry(c).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Details", new { id = p.Id });
-    }
-
-    //[ChildActionOnly]
-    public async Task<ActionResult> DetailsPage()
-    {
-      string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
-      return PartialView("header", p.Id);
     }
   }
 }

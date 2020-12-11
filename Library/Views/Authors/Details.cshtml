@@ -1,15 +1,15 @@
 @using Library.Models
 
 @{
-    Layout = "_Layout";
+  Layout = "_Layout";
 }
 
 <p>@Model.Name</p>
+
 <ul>
-  @foreach(AuthorBook join in @Model)
+  <p>Books by this author:</p>
+  @foreach (AuthorBook join in @Model.Books)
   {
     <li>@Html.ActionLink(@join.Book.Title,"Details","Authors")</li>
   }
 </ul>
-
-

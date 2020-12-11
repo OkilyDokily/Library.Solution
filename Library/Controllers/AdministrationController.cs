@@ -20,7 +20,6 @@ namespace Library.Controllers
     {
       if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
       {
-        Console.WriteLine(User.FindFirstValue(ClaimTypes.Name).ToString());
         DateTime today = DateTime.Now;
         List<PatronCopy> patroncopies = _db.PatronCopies.Include(x => x.Copy).ThenInclude(x => x.Book).Include(x => x.Patron).Where(x => (today.CompareTo(x.DueDate) > 0) && x.Returned == false).ToList();
         Console.WriteLine(patroncopies);

@@ -1,5 +1,4 @@
-@using System.Web.Mvc.Html
-
+@using System.Threading.Tasks
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +9,9 @@
 </head>
 
 <body>
-  @Html.Action("Index","Patrons")
+  @await Component.InvokeAsync("PatronDetailsPage")
   @RenderBody()
+  @Html.Partial("links")
 </body>
 
 </html>

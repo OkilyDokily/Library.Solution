@@ -24,20 +24,36 @@ namespace Library.Controllers
 
     public ActionResult Create(int id)
     {
-      return View();
+      if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+      {
+        return View();
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
+      
     }
 
     [HttpPost]
     public ActionResult Create(int id, int number)
     {
-      for (int i = 0; i < number; i++)
+      if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
       {
-        Copy c = new Copy() { BookId = id, IsCheckedOut = false };
-        _db.Copies.Add(c);
-        _db.SaveChanges();
-      }
+        for (int i = 0; i < number; i++)
+        {
+          Copy c = new Copy() { BookId = id, IsCheckedOut = false };
+          _db.Copies.Add(c);
+          _db.SaveChanges();
+        }
 
-      return RedirectToAction("Details", "Books", new { id = id });
+        return RedirectToAction("Details", "Books", new { id = id });
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
+    
     }
 
     public ActionResult Details(int id)

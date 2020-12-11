@@ -1,0 +1,20 @@
+@using System.Security.Claims
+@using Library.Models
+
+<div>
+  @if(User.FindFirstValue(ClaimTypes.Name) != null)
+    {
+    @if(LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+    {
+      <p>You are logged in as a librarian</p>
+    }
+    else
+    {
+      <p>You are logged in as a patron</p>
+    }
+  }
+  else
+  {
+    <p>You are not logged in</p>
+  }
+</div>

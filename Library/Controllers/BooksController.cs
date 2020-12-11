@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Library.Models;
 using System;
+using System.Security.Claims;
 
 namespace Library.Controllers
 {
@@ -18,15 +19,29 @@ namespace Library.Controllers
 
     public ActionResult Create()
     {
-      return View();
+      if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+      {
+        return View();
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
     }
 
     [HttpPost]
     public ActionResult Create(Book b)
     {
-      _db.Books.Add(b);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
+      if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+      {
+        _db.Books.Add(b);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+      }
+      else
+      {
+        return RedirectToAction("Index", "Home");
+      }
     }
 
     public ActionResult Index()

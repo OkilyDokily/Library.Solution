@@ -1,5 +1,9 @@
 @using Library.Models
 
+@{
+    Layout = "_Layout";
+}
+
 <p>@Model.Name</p>
 <ul>
   @foreach(AuthorBook join in @Model)

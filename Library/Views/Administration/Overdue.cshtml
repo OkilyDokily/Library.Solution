@@ -1,6 +1,19 @@
 @using Library.Models
-<p>List of overdue books</p>
-@foreach (PatronCopy join in @Model)
+@using System.Security.Claims
+
+@{
+    Layout = "_Layout";
+}
+
+@if(LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
 {
-  <p>A copy of @join.Copy.Book.Title checked out by @join.Patron.Name is due</p>
+  <p>List of overdue books</p>
+  @foreach (PatronCopy join in @Model)
+  {
+    <p>A copy of @join.Copy.Book.Title checked out by @join.Patron.Name is due</p>
+  }
+}
+else
+{
+  <p>You must be logged in as a Librarian to view this page</p>
 }

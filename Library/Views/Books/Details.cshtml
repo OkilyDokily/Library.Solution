@@ -1,4 +1,9 @@
 @using Library.Models
+@using System.Security.Claims
+
+@{
+    Layout = "_Layout";
+}
 
 <p>@Model.Title</p>
 <p>Authors</p>
@@ -13,6 +18,8 @@
   </p>
 }
 
-
-@Html.ActionLink("Add authors to this book","Add","Authors", new{id = @Model.Id})
-@Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})
+@if(LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+{
+  @Html.ActionLink("Add authors to this book","Add","Authors", new{id = @Model.Id})
+  @Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})  
+}

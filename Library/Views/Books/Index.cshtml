@@ -1,11 +1,21 @@
 @using Library.Models;
-<p>"Search for Books by title"</p>
-@using(Html.BeginForm())
+@using System.Security.Claims
+
+@{
+    Layout = "_Layout";
+}
+
+<p>Search for Books by title</p>
+@using (Html.BeginForm())
 {
     @Html.TextBox("title")
-    <input type="submit" value="Search">  
+    <input type="submit" value="Search">
 }
-<p>@Html.ActionLink("Add a book to the library", "Create","Books")</p>
+@if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+{
+    <p>@Html.ActionLink("Add a book to the library", "Create","Books")</p>
+}
+
 @foreach (Book book in @Model)
 {
     <p>@Html.ActionLink(book.Title,"Details",new {id = book.Id})</p>

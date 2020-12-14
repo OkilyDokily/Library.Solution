@@ -20,6 +20,6 @@
 
 @if(LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
 {
-  @Html.ActionLink("Add authors to this book","Add","Authors", new{id = @Model.Id})
-  @Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})  
+  <p>@Html.ActionLink("Add authors to this book","Add","Authors", new{id = @Model.Id})</p>
+  <p>@Html.ActionLink("Add copies of this book to Library","Create","Copies", new {id = @Model.Id})</p>
 }

@@ -38,7 +38,18 @@ namespace Library.Controllers
     {
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      Patron p = _db.Patrons.Include(x => x.User).Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.User.Id == currentUser.Id);
+
+      Patron p;
+      if ((LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name))))
+      {
+        p = _db.Patrons.Include(x => x.User).Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.Id == id);
+      }
+      else
+      {
+        p = _db.Patrons.Include(x => x.User).Include(x => x.Copies).ThenInclude(x => x.Copy).ThenInclude(x => x.Book).FirstOrDefault(x => x.User.Id == currentUser.Id);
+      }
+
+       
       if ((LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)) || id == p.Id) && userId != null)
       {
         return View(p);
@@ -47,7 +58,6 @@ namespace Library.Controllers
       {
         return RedirectToAction("Index", "Home");
       }
-
     }
 
     [HttpPost]
@@ -56,7 +66,7 @@ namespace Library.Controllers
 
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      DateTime today = (DateTime.Now).AddDays(42);
+      DateTime today = (DateTime.Now).AddDays(42).Date;
       Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
 
       PatronCopy pc = new PatronCopy() { CopyId = id, PatronId = p.Id, DueDate = today };

@@ -1,14 +1,26 @@
+@using Library.Models
+
 @{
-    Layout = "_Layout";
+  Layout = "_Layout";
 }
 
 @model Library.Models.Book
 
 <p>Search for authors to add to this book.</p>
 <p>@Model.Title</p>
-@using (Html.BeginForm("Search","Authors"))
+@using (Html.BeginForm("Search", "Authors"))
 {
   @Html.Hidden("id",@Model.Id)
   @Html.TextBox("name")
   <input type="submit" value="Search">
+}
+<p>List of Authors</p>
+@foreach (Author author in @ViewBag.Authors)
+{
+    <p>@Html.ActionLink(@author.Name,"Details","Authors",new{id = @author.Id})    @using (Html.BeginForm("ResultsPost","Authors", FormMethod.Post,new{@class = "inline"}))
+    {
+              @Html.Hidden("id",@Model.Id)
+              @Html.Hidden("authorid",@author.Id)
+              <input type="submit" value="Add author to book">
+    }</p>
 }

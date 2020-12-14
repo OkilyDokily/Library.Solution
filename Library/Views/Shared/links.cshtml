@@ -1,14 +1,14 @@
 @using System.Security.Claims
-
+<hr>
 <p>@Html.ActionLink("Go to accounts page","Index","Account")</p>
 <p>@Html.ActionLink("Go to books page","Index","Books")</p>
 <p>@Html.ActionLink("Go to authors page","Index","Authors")</p>
 @if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
 {
-    <p>Librarian access only</p>
     <p>-----------</p>
+    <p>Librarian access only</p>
     <p>
     <p>@Html.ActionLink("Go to patrons page","Index","Patrons")</p>
+    <p>@Html.ActionLink("Go to overdue books","Overdue","Administration")</p>
     </p>
-
 }

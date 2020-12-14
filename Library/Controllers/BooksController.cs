@@ -58,7 +58,6 @@ namespace Library.Controllers
 
     public ActionResult Results(string title)
     {
-      Console.WriteLine(title);
       List<Book> books = Book.SearchByTitle(this, title);
       return View(books);
     }

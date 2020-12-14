@@ -1,9 +1,24 @@
-@using Library.Models;
+@using Library.Models
+@using System.Security.Claims
 
 @{
-    Layout = "_Layout";
+  Layout = "_Layout";
 }
 
+<p>Search for Authors by name</p>
+@using (Html.BeginForm())
+{
+  @Html.TextBox("name")
+  <input type="submit" value="Search">
+}
+
+@if(LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
+{
+  <p>@Html.ActionLink("Add author to Library","Create")</p>
+}
+
+
+<p>List of Authors</p>
 @foreach (Author author in @Model)
 {
   <p>@Html.ActionLink(author.Name,"Details",new {id = author.Id})</p>

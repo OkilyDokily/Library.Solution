@@ -8,16 +8,17 @@
 <ul>
   @foreach(PatronCopy join in @Model.Copies)
   {
-    <li>@Html.ActionLink(join.Copy.Book.Title,"Details","Books",new{id = join.Copy.Book.Id}) : Due On - @join.DueDate</li>
-    @if(join.Returned == false)
-    {
-      <p>Would you like to return this copy? @using(Html.BeginForm("Return","Patrons"))
-      {
-        @Html.Hidden("patroncopyid",@join.Id);
-        <input type="submit" value="Return">
-      }</p>
-      
-    }
+    <li>@Html.ActionLink(join.Copy.Book.Title,"Details","Books", new{id = join.Copy.Book.Id}) : Due On - @join.DueDate.Month / @join.DueDate.Day / @join.DueDate.Year
+        @if(join.Returned == false)
+        {
+          @using(Html.BeginForm("Return","Patrons",FormMethod.Post, new {@class = "inline"}))
+          {
+            @Html.Hidden("patroncopyid",@join.Id);
+            <input type="submit" value="Return" class="inline">
+          } 
+        }
+    </li>
+  
   }
 </ul>
 

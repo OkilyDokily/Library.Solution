@@ -55,10 +55,24 @@ namespace Library.Controllers
       return View(author);
     }
 
+    [HttpPost]
+    public ActionResult Index(string name)
+    {
+      return RedirectToAction("SearchResults", new { name = name });
+    }
+
+    public ActionResult SearchResults(string name)
+    {
+      List<Author> authors = Author.Search(this, name);
+      return View(authors);
+    }
+
     public ActionResult Add(int id)
     {
       if (LibraryList.libraryList.Any(x => x == User.FindFirstValue(ClaimTypes.Name)))
       {
+        List<Author> authors = _db.Authors.ToList();
+        ViewBag.Authors = authors;
         Book b = _db.Books.FirstOrDefault(x => x.Id == id);
         return View(b);
       }

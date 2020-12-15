@@ -14,13 +14,14 @@
   @Html.TextBox("name")
   <input type="submit" value="Search">
 }
-<p>List of Authors</p>
-@foreach (Author author in @ViewBag.Authors)
-{
-    <p>@Html.ActionLink(@author.Name,"Details","Authors",new{id = @author.Id})    @using (Html.BeginForm("ResultsPost","Authors", FormMethod.Post,new{@class = "inline"}))
-    {
-              @Html.Hidden("id",@Model.Id)
-              @Html.Hidden("authorid",@author.Id)
-              <input type="submit" value="Add author to book">
-    }</p>
-}
+@* <p>List of Authors</p>
+  @foreach (Author author in @ViewBag.Authors)
+  {
+  <p>@Html.ActionLink(@author.Name,"Details","Authors",new{id = @author.Id}) @using
+  (Html.BeginForm("ResultsPost","Authors", FormMethod.Post,new{@class = "inline"}))
+  {
+  @Html.Hidden("id",@Model.Id)
+  @Html.Hidden("authorid",@author.Id)
+  <input type="submit" value="Add author to book">
+  }</p>
+  } *@

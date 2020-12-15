@@ -66,7 +66,7 @@ namespace Library.Controllers
 
       string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      DateTime today = (DateTime.Now).AddDays(42).Date;
+      DateTime today = (DateTime.Now).AddDays(-42).Date;
       Patron p = _db.Patrons.FirstOrDefault(x => x.User.Id == currentUser.Id);
 
       PatronCopy pc = new PatronCopy() { CopyId = id, PatronId = p.Id, DueDate = today };
